@@ -1,7 +1,6 @@
-Late Night Live
------------------------------
+plugin.audio.abcradionational
+=============================
 
-Add-on for Kodi Media Player
+Kodi Add-on for ABC Radio - Late Night Live
 
------------------------------
-by Damon Toumbourour
+Late Night Live - With Phillip Adams: From razor-sharp analysis of current events to the hottest debates in politics, science, philosophy and culture, Late Night Live puts you firmly in the big picture.
