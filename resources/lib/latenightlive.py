@@ -85,7 +85,7 @@ def get_subjects_contents(url):
     output = []
 
     content = soup.find_all('div', {'class': 'cs-teaser'})
-    print 'start' 
+    
     for i in content:
         try:
             title = i.find('h3', {'class': 'title'})
@@ -97,9 +97,6 @@ def get_subjects_contents(url):
 
             img = i.find('img')
             img = img.get('src')
-            print 'img: '
-            print img
-            print '\n'
 
         except AttributeError:
             continue
@@ -113,7 +110,7 @@ def get_subjects_contents(url):
         output.append(item)
 
     return output
-get_subjects_contents("http://www.abc.net.au/radionational/programs/latenightlive/past-programs/subjects/index=aboriginal")
+
 
 def get_playable_subjects(url):
 
