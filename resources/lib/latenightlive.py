@@ -2,12 +2,12 @@ import requests
 import re
 from bs4 import BeautifulSoup as bs
 
-URL = "http://www.abc.net.au/radionational/programs/latenightlive/"
+BASE_URL = "http://www.abc.net.au"
 
 
-def get_audio():
+def get_audio(url):
 
-    page = requests.get(URL)
+    page = requests.get(url)
     soup = bs(page.text, 'html.parser')
 
     output = []
@@ -44,6 +44,106 @@ def get_audio():
             'info': item['desc'],
             'is_playable': True,
         })
-        
+    
     return output
 
+
+def get_subjects(url):
+    
+    page = requests.get(url)
+    soup = bs(page.text, 'html.parser')
+    
+    output = []
+    content = soup.find('ol', {'class':'article-index'})
+    content = content.find_all('a')
+        
+    for i in content:
+        try:
+            title = i.get_text()
+            
+            url = i.get('href')
+            url = BASE_URL + url
+        
+        except AttributeError:
+            continue
+
+        item = {
+                'title': title,
+                'url': url
+        }
+
+        output.append(item)
+
+    return output
+
+
+def get_subjects_contents(url):
+
+    page = requests.get(url)
+    soup = bs(page.text, 'html.parser')
+
+    output = []
+
+    content = soup.find_all('div', {'class': 'cs-teaser'})
+    print 'start' 
+    for i in content:
+        try:
+            title = i.find('h3', {'class': 'title'})
+            title = title.get_text()
+            
+            url = i.find('a')
+            url = url.get('href')
+            url = BASE_URL + url
+
+            img = i.find('img')
+            img = img.get('src')
+            print 'img: '
+            print img
+            print '\n'
+
+        except AttributeError:
+            continue
+        
+        item = {
+                'title': title,
+                'url': url,
+                'img': img
+        }
+        
+        output.append(item)
+
+    return output
+get_subjects_contents("http://www.abc.net.au/radionational/programs/latenightlive/past-programs/subjects/index=aboriginal")
+
+def get_playable_subjects(url):
+
+    page = requests.get(url)
+    soup = bs(page.text, 'html.parser')
+
+    output = []
+
+    content = soup.find('div', {'class': 'article'})
+    
+    url = content.find('ul', {'class': 'cs-has-media'})
+    url = url.find('a')
+    url = url.get('href')
+    
+    img = content.find('img')
+    img = img.get('src')
+
+    title = content.find('h1')
+    title = title.get_text()
+    
+    item = {'title': title,
+            'url': url,
+            'img': img
+    }
+    
+    output.append({
+        'label': item['title'],
+        'path': item['url'],
+        'thumbnail': item['img'],
+        'is_playable': True,
+    })
+    
+    return output
